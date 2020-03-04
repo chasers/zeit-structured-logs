@@ -3,8 +3,12 @@ import Link from 'next/link';
 import Head from '../components/head';
 import Nav from '../components/nav';
 
+const logger = require('pino')()
+
 const Home = () => {
   const [date, setDate] = useState(null);
+
+  logger.info({user: {name: "Joe Schmo", email: "joe@dunder.dev", company: "Dunder Dev", id: 38}, event: {type: "pageview"}})
 
   useEffect(() => {
     async function getDate() {
