@@ -34,8 +34,8 @@ const Home = () => {
               <b>{date.date}</b>
             </span>
           ) : (
-            <span className="loading"></span>
-          )}
+              <span className="loading"></span>
+            )}
         </p>
 
         <div className="row">
