@@ -1,3 +1,5 @@
+import { prepKeyValuesKeys } from "../../utils/utils"
+
 const logger = require('pino')({
   base: {
     env: process.env.ENV || "ENV not set"
@@ -6,7 +8,9 @@ const logger = require('pino')({
 
 export default (req, res) => {
 
-  logger.info({ user: { name: "Joe Schmo", email: "joe@dunder.dev", company: "Dunder Dev", id: 38 }, event: { type: "request", tag: "api" } })
+  const headers = prepKeyValuesKeys(req.headers)
+
+  logger.info({ request: { headers: headers } })
 
   const date = new Date()
     .toISOString()

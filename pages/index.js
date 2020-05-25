@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import Head from '../components/head';
 import Nav from '../components/nav';
+import { prepKeyValuesKeys } from "../utils/utils"
+
+const logger = require('pino')({
+  base: {
+    env: process.env.ENV || "ENV not set"
+  }
+})
 
 const Home = props => {
-  console.log(props.headers)
+
   const [date, setDate] = useState(null);
 
   useEffect(() => {
@@ -134,5 +140,17 @@ const Home = props => {
     </div>
   );
 };
+
+
+export async function getServerSideProps(context) {
+
+  const headers = prepKeyValuesKeys(context.req.headers)
+
+  logger.info({ request: { headers: headers } })
+
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
 
 export default Home;
