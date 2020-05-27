@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Head from '../components/head';
 import Nav from '../components/nav';
-import { prepKeyValuesKeys } from "../utils/utils"
+import { prepObjectKeys } from "../logger/utils"
 
-const logger = require('pino')({
-  base: {
-    env: process.env.ENV || "ENV not set"
-  }
-})
+const logger = require('../logger/logger').default
+
 
 const Home = props => {
 
@@ -141,10 +138,9 @@ const Home = props => {
   );
 };
 
-
 export async function getServerSideProps(context) {
 
-  const headers = prepKeyValuesKeys(context.req.headers)
+  const headers = prepObjectKeys(context.req.headers)
 
   logger.info({ request: { headers: headers } })
 

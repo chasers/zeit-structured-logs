@@ -1,14 +1,9 @@
-import { prepKeyValuesKeys } from "../../utils/utils"
-
-const logger = require('pino')({
-  base: {
-    env: process.env.ENV || "ENV not set"
-  }
-})
+import { prepObjectKeys } from "../../logger/utils"
+const logger = require('../../logger/logger').default
 
 export default (req, res) => {
 
-  const headers = prepKeyValuesKeys(req.headers)
+  const headers = prepObjectKeys(req.headers)
 
   logger.info({ request: { headers: headers } })
 

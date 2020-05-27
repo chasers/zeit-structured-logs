@@ -1,4 +1,4 @@
-const prepKeyValuesKeys = headers => {
+const prepObjectKeys = headers => {
 
     const keyValues = {}
     Object.keys(headers).map(key => {
@@ -9,4 +9,4 @@ const prepKeyValuesKeys = headers => {
     return keyValues
 }
 
-export { prepKeyValuesKeys }
+export { prepObjectKeys }
