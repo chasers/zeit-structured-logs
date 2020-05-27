@@ -1,6 +1,7 @@
+const logger = require('../logger/logger').default
 
 export function reportWebVitals(metric) {
-    console.log(metric)
+    logger.info(metric, "Web vitals!")
 }
 
 function MyApp({ Component, pageProps }) {
