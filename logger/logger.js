@@ -11,12 +11,9 @@ export default pino(
         },
         browser: {
             asObject: true,
-            transmit: {
-                level: 'debug',
-                send(level, logEvent) {
-                    const body = toLogEntry(logEvent)
-                    postRequest(body)
-                }
+            write: (o) => {
+                const body = toLogEntry(o)
+                postRequest(body)
             }
         },
         prettyPrint: typeof window === 'undefined' && process.env.ENV === 'development',
@@ -44,13 +41,15 @@ const postRequest = async (lfRequestBody) => {
 }
 
 function toLogEntry(item) {
-    const timestamp = item.ts || new Date().getTime()
-    const message = getMessage(item)
-    const level = item.level.label
+    const timestamp = item.time || new Date().getTime()
+    const message = item.msg
+    const level = levelToStatus(item.level)
+
+    const metadata = _.omit(item, ["time", "msg", "level"])
 
     return {
         metadata: {
-            ...getMetadata(item),
+            ...metadata,
             level: level
         },
         log_entry: message,
@@ -58,19 +57,18 @@ function toLogEntry(item) {
     }
 }
 
-function getMessage(item) {
-    if (item.messages.length == 2) {
-        return item.messages[1]
+function levelToStatus(level) {
+    if (level === 10 || level === 20) {
+        return "debug"
     }
-    if (item.messages.length == 1) {
-        return item.messages[0]
+    if (level === 40) {
+        return "warning"
     }
-    return "no message"
-}
-
-function getMetadata(item) {
-    if (item.messages.length == 2) {
-        return item.messages[0]
+    if (level === 50) {
+        return "error"
     }
-    return
+    if (level >= 60) {
+        return "critical"
+    }
+    return "info"
 }
