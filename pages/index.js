@@ -10,7 +10,7 @@ const Home = props => {
 
   const [date, setDate] = useState(null);
 
-  logger.info("Index home")
+  logger.info("Getting date")
 
   useEffect(() => {
     async function getDate() {
