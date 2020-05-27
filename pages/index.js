@@ -10,6 +10,8 @@ const Home = props => {
 
   const [date, setDate] = useState(null);
 
+  logger.info("Index home")
+
   useEffect(() => {
     async function getDate() {
       const res = await fetch('/api/date');
