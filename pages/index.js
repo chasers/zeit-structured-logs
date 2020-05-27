@@ -5,15 +5,14 @@ import { prepObjectKeys } from "../logger/utils"
 
 const logger = require('../logger/logger').default
 
-
 const Home = props => {
 
   const [date, setDate] = useState(null);
 
-  logger.info("Getting date")
-
   useEffect(() => {
     async function getDate() {
+      logger.info("Getting date")
+
       const res = await fetch('/api/date');
       const newDate = await res.json();
       setDate(newDate);
