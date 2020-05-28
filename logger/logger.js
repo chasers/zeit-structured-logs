@@ -24,7 +24,7 @@ export default pino(
 
 const postRequest = async (lfRequestBody) => {
     const ingestApiKey = "S85LoAXJUB8U"
-    const source_id = "6a33ed2e-6e25-42f3-b052-283883d9663a"
+    const source_id = "f5f2c049-f3c7-4e90-bff6-0cff8b89638a"
     const logflareApiURL = `https://api.logflare.app/logs?api_key=${ingestApiKey}&source=${source_id}`
 
 
@@ -41,11 +41,13 @@ const postRequest = async (lfRequestBody) => {
 }
 
 function toLogEntry(item) {
-    const timestamp = item.time || new Date().getTime()
-    const message = item.msg
-    const level = levelToStatus(item.level)
+    // float to int web vitals until Logflare has a special Web Vitals endpoint
+    const newItem = maybeNewWebVitals(item)
+    const timestamp = newItem.time || new Date().getTime()
+    const message = newItem.msg
+    const level = levelToStatus(newItem.level)
 
-    const metadata = _.omit(item, ["time", "msg", "level"])
+    const metadata = _.omit(newItem, ["time", "msg", "level"])
 
     return {
         metadata: {
@@ -71,4 +73,27 @@ function levelToStatus(level) {
         return "critical"
     }
     return "info"
+}
+
+function maybeNewWebVitals(item) {
+    if (item.web_vitals) {
+        const wv = {
+            id: item.web_vitals.id,
+            label: item.web_vitals.label,
+            name: item.web_vitals.name,
+            startTime: zeroToAlmostZero(item.web_vitals.startTime),
+            value: zeroToAlmostZero(item.web_vitals.value)
+        }
+
+        item.web_vitals = wv
+        return item
+    }
+    return item
+}
+
+function zeroToAlmostZero(num) {
+    if (num == 0) {
+        return 0.00000000000001
+    }
+    return num
 }
