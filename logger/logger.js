@@ -1,6 +1,10 @@
 import pino from 'pino';
 
-const stream = require('./logflareStream').default
+// funnel logs to logflare on production servers only
+const stream =
+    typeof window === 'undefined' && process.env.NODE_ENV === 'production'
+        ? require('./logflareStream').default
+        : undefined;
 
 export default pino(
     {
@@ -16,8 +20,7 @@ export default pino(
                 postRequest(body)
             }
         },
-        prettyPrint: typeof window === 'undefined' && process.env.ENV === 'development',
-        // ^ only works in node env
+        prettyPrint: true
     },
     stream,
 );
