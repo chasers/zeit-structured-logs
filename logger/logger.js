@@ -39,7 +39,7 @@ const postRequest = async (lfRequestBody) => {
 }
 
 function toLogEntry(item) {
-    // float to int web vitals until Logflare has a special Web Vitals endpoint
+    // 0 to almost 0 web vitals until Logflare has a special Web Vitals endpoint
     const newItem = maybeNewWebVitals(item)
     const timestamp = newItem.time || new Date().getTime()
     const message = newItem.msg
